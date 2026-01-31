@@ -1,0 +1,35 @@
+{
+  "name": "media-planner-addin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Agency-grade UTM generation and financial forecasting Excel Add-in",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "start": "vite preview --port 3000",
+    "validate": "npx office-addin-manifest validate manifest.xml",
+    "sideload": "npx office-addin-debugging start manifest.xml",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/office-js": "^1.0.400",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "autoprefixer": "^10.4.0",
+    "office-addin-debugging": "^5.1.0",
+    "office-addin-dev-certs": "^1.13.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.5.0",
+    "vite": "^6.0.0",
+    "vitest": "^4.0.18"
+  }
+}

@@ -1,0 +1,69 @@
+# Hoagie Media Planner - AI Coding Rules
+
+## Domain Context
+This is an Office.js Excel Add-in for media agency planners. It automates UTM generation and financial forecasting for multi-channel brand campaigns.
+
+## Architecture
+- Office.js Excel Add-in with React 18 taskpane
+- TypeScript strict mode — NO `any` types
+- Tailwind CSS with Linear-style dark mode UI
+- Zustand for state management
+- Vite bundler
+
+## Engineering Standards (from Rules.md)
+- ALWAYS use batch-writes (`range.values`) instead of individual cell updates
+- TypeScript for ALL Office.js interactions — prevent null-reference errors
+- Linear-style Dark Mode using Tailwind — avoid standard Office UI Fabric looks
+- Every UTM must be validated against channel schema before writing to worksheet
+- Use `context.sync()` sparingly — batch operations before syncing
+
+## UTM Naming Convention
+Pattern: `[Client]_[Product]_[Audience]_[CreativeID]`
+- Lowercase all strings
+- Replace spaces with hyphens
+- Strip all special characters (prevent GA4 reporting breaks)
+- utm_source must never be empty
+- Validate against channel-schema before writing
+
+## Core Data Tables
+1. **ChannelTable**: Source, Medium, Default_CPC, Default_CTR
+2. **BudgetTable**: Campaign_Name, UTM_String, Monthly_Budget, Start_Date
+3. **ForecastTable**: Date, Projected_Spend, Projected_Conversions, Formula_Type
+
+## Key Formulas
+- CPM = (Spend / Impressions) * 1000
+- Impressions = (Budget / CPM) * 1000
+- TRP = (Impressions / Universe) * 100
+- CPP = Spend / TRPs
+- Pacing = Actual / Planned (5% tolerance = on-track)
+- Weighted Benchmark = (Historical * histWeight) + (Plan * planWeight) + (Adjustment * adjWeight)
+
+## Channel Categories
+- Video: Linear TV, CTV, OLV, YouTube Reservation, YouTube Auction
+- Digital: Display Premium/Standard, Native Premium/Standard
+- Social: Meta Reach, Meta Video Views, Meta Traffic
+
+## Buy Types
+cpm | cpc | cpv | cpa | flat | trp
+
+## Objective KPIs
+Awareness-CPM | Awareness-CPV | Engagement-VCR | Engagement-CP Thru-Play | Traffic-CP Site Visit | Traffic-CPC | Conversion-CPA
+
+## Code Patterns
+- Use Excel formulas (not hardcoded values) when writing to cells
+- Generate formulas like `=(A1/B1)*1000` for CPM calculations
+- Apply conditional formatting for pacing: Red (<90%), Yellow (90-95%), Green (95-105%), Orange (>105%)
+- Use Office.js shared runtime for background listeners
+- Wrap all Excel operations in `Excel.run(async (context) => { ... })`
+
+## File Organization
+- src/types/ — All TypeScript interfaces
+- src/lib/calculations.ts — Media math functions
+- src/lib/excel.ts — Office.js helpers (batch read/write)
+- src/lib/validation.ts — UTM and data validation
+- src/constants/channels.ts — Channel configurations
+- src/store/ — Zustand state management
+- src/components/utm/ — UTM builder UI
+- src/components/forecasting/ — Budget/impression forecasting UI
+- src/components/pacing/ — Spend tracking vs plan UI
+- src/components/shared/ — Reusable UI components
